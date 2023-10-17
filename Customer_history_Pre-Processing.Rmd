@@ -1,0 +1,111 @@
+---
+title: "DS 4300 Project Pre-Process"
+author: "Jennie An"
+date: '2023-03-29'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+```
+
+# Load in transactions and select relevant columns, remove Nas
+
+```{r}
+transactions_sample <- read_csv(
+"C:/Users/jenni/DS 4300/transactions_sample.csv", show_col_types = FALSE)
+transactions_sample
+```
+
+```{r}
+transactions_sample <- transactions_sample[,-c(1, 5)]
+transactions_sample
+```
+
+```{r}
+transactions_sample <- na.omit(transactions_sample)
+transactions_sample
+```
+
+# Load in articles and select relevant columns
+
+```{r}
+articles_sample <- read_csv(
+"C:/Users/jenni/DS 4300/articles.csv", show_col_types = FALSE)
+articles_sample
+```
+
+```{r}
+articles_sample <- articles_sample[,c(1, 3, 5, 6, 8, 10, 16, 22, 25)]
+articles_sample
+```
+
+```{r}
+articles_sample$article_id <- as.double(articles_sample$article_id)
+articles_sample
+```
+
+# Load in customers and select relevant columns
+
+```{r}
+customers_sample <- read_csv(
+"C:/Users/jenni/DS 4300/customers.csv", show_col_types = FALSE)
+customers_sample
+```
+
+```{r}
+customers_sample <- customers_sample[,-c(2, 3, 7)]
+customers_sample
+```
+
+# Filter articles and customers for those in transactions
+
+```{r}
+articles_filter <- filter(articles_sample, article_id %in% transactions_sample$article_id)
+articles_filter
+```
+
+```{r}
+customers_filter <- filter(customers_sample, customer_id %in% transactions_sample$customer_id)
+customers_filter
+```
+
+# check for nas in articles and customers, filter for transactions
+
+```{r}
+articles_final <- na.omit(articles_filter)
+articles_final
+```
+
+```{r}
+customers_final <- na.omit(customers_filter)
+customers_final
+```
+
+```{r}
+transactions_final <- filter(transactions_sample, article_id %in% articles_final$article_id)
+transactions_final
+```
+
+```{r}
+transactions_final <- filter(transactions_final, customer_id %in% customers_final$customer_id)
+transactions_final
+```
+
+# Save transactions, articles, and customers as csvs
+
+```{r}
+write.csv(articles_final, "C:/Users/jenni/OneDrive/Documents/DS 4300/articles_final.csv", row.names = FALSE)
+```
+
+```{r}
+write.csv(customers_final, "C:/Users/jenni/OneDrive/Documents/DS 4300/customers_final.csv", row.names = FALSE)
+```
+
+```{r}
+write.csv(transactions_final, "C:/Users/jenni/OneDrive/Documents/DS 4300/transactions_final.csv", row.names = FALSE)
+```
+

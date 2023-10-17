@@ -1,0 +1,66 @@
+reading in transactions:
+
+
+:auto LOAD CSV WITH HEADERS FROM 'file:///t_samples.csv' AS line
+CALL {
+ WITH line
+ MATCH (c1:Customer {customer_id: line.customer_id}), (a1:Article {article_id: line.article_id})
+CREATE (c1)-[:Bought]->(a1)
+} IN TRANSACTIONS OF 1000 ROWS
+
+
+reading in customers
+
+LOAD CSV WITH HEADERS FROM "file:///customer_sample.csv" AS line CREATE (c:Customer {customer_id: line.customer_id, age: line.age, age_range:  line.Age_Range})
+
+
+reading in articles
+
+LOAD CSV WITH HEADERS FROM "file:///art.csv" AS line CREATE (a:Article {article_id: line.article_id, name: line.prod_name, type_name: line.product_type_name, group_name: line.product_group_name, graphical_app: line.graphical_appearance_name, color: line.colour_group_name, department: line.department_name, section: line.section_name, description: line.detail_desc}) 
+
+
+Adding: a.type_name = [type of clothing] to where clause will allow for specific clothing items
+
+
+Get ≤18 recommendations
+
+MATCH (c:Customer)-[:Bought]->(a:Article)
+WHERE c.age_range = '≤18' 
+RETURN collect(a) AS articles
+
+Get ≤18 recommendations
+
+MATCH (c:Customer)-[:Bought]->(a:Article)
+WHERE c.age_range = '19-24' 
+RETURN collect(a) AS articles
+
+Get 25-34 recommendations
+
+MATCH (c:Customer)-[:Bought]->(a:Article)
+WHERE c.age_range = '25-34' 
+RETURN collect(a) AS articles
+
+Get 35-44 recommendations
+
+MATCH (c:Customer)-[:Bought]->(a:Article)
+WHERE c.age_range = '35-44' 
+RETURN collect(a) AS articles
+
+Get 45-54 recommendations
+
+MATCH (c:Customer)-[:Bought]->(a:Article)
+WHERE c.age_range = '45-54' 
+RETURN collect(a) AS articles
+
+Get 55-64 recommendations
+
+MATCH (c:Customer)-[:Bought]->(a:Article)
+WHERE c.age_range = '55-64' 
+RETURN collect(a) AS articles
+
+
+Get 65+ recommendations
+
+MATCH (c:Customer)-[:Bought]->(a:Article)
+WHERE c.age_range = '65+' 
+RETURN collect(a) AS articles

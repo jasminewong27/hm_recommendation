@@ -1,0 +1,66 @@
+---
+title: "Project Articles Exploration"
+author: "Jennie An"
+date: '2023-04-04'
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+```
+
+# Import data
+
+```{r}
+articles <- read_csv(
+"C:/Users/jenni/OneDrive/Documents/DS 4300/articles_final.csv", show_col_types = FALSE)
+articles
+```
+
+# Types of product_type_name
+
+```{r}
+product_type <- as.data.frame(as.matrix(table(articles$product_type_name)))
+product_type <- rownames_to_column(product_type, "type")
+names(product_type)[2] = "count"
+product_type
+```
+
+# Types of colour_group_name
+
+```{r}
+color_group <- as.data.frame(as.matrix(table(articles$colour_group_name)))
+color_group <- rownames_to_column(color_group, "color")
+names(color_group)[2] = "count"
+color_group
+```
+
+# Types of graphical_appearance_name
+
+```{r}
+graphical_app <- as.data.frame(as.matrix(table(articles$graphical_appearance_name)))
+graphical_app <- rownames_to_column(graphical_app, "type")
+names(graphical_app)[2] = "graphical_appearance"
+graphical_app
+```
+
+# Export types and counts as csv
+
+```{r}
+# save types as csv
+write.csv(product_type, "C:/Users/jenni/OneDrive/Documents/DS 4300/product_type.csv", row.names = FALSE)
+```
+
+```{r}
+# save colors as csv
+write.csv(color_group, "C:/Users/jenni/OneDrive/Documents/DS 4300/color_group.csv", row.names = FALSE)
+```
+
+```{r}
+# save graphical appearances as csv
+write.csv(graphical_app, "C:/Users/jenni/OneDrive/Documents/DS 4300/graphical_app.csv", row.names = FALSE)
+```
+
